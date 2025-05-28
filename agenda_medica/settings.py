@@ -164,3 +164,6 @@ STATICFILES_DIRS = [
 # Configuración de archivos media
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# Modelo de usuario personalizado
+AUTH_USER_MODEL = 'usuarios.Usuario'
