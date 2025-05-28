@@ -22,9 +22,14 @@ class RegistroPacienteView(CreateView):
     success_url = reverse_lazy('usuarios:registro_exitoso')
     
     def dispatch(self, request, *args, **kwargs):
-        # Redirigir usuarios autenticados
+        # Redirigir usuarios autenticados según su tipo
         if request.user.is_authenticated:
-            return redirect('usuarios:dashboard')
+            if request.user.es_administrador() or request.user.es_recepcion():
+                return redirect('administracion:dashboard')
+            elif request.user.es_doctor():
+                return redirect('doctores:gestionar_horarios')
+            else:
+                return redirect('usuarios:dashboard')
         return super().dispatch(request, *args, **kwargs)
     
     def form_valid(self, form):
@@ -52,7 +57,13 @@ def inicio_sesion_view(request):
     Vista para inicio de sesión
     """
     if request.user.is_authenticated:
-        return redirect('usuarios:dashboard')
+        # Redirigir según el tipo de usuario si ya está autenticado
+        if request.user.es_administrador() or request.user.es_recepcion():
+            return redirect('administracion:dashboard')
+        elif request.user.es_doctor():
+            return redirect('doctores:gestionar_horarios')
+        else:
+            return redirect('usuarios:dashboard')
     
     if request.method == 'POST':
         form = InicioSesionForm(request, data=request.POST)
@@ -71,7 +82,15 @@ def inicio_sesion_view(request):
             if next_url:
                 return redirect(next_url)
             
-            return redirect('usuarios:dashboard')
+            # Redirigir según el tipo de usuario
+            if user.es_administrador():
+                return redirect('administracion:dashboard')
+            elif user.es_doctor():
+                return redirect('doctores:gestionar_horarios')
+            elif user.es_recepcion():
+                return redirect('administracion:dashboard')  # Recepción también usa el dashboard admin
+            else:  # Paciente
+                return redirect('usuarios:dashboard')
         else:
             messages.error(request, 'Por favor corrige los errores en el formulario.')
     else:
@@ -114,11 +133,14 @@ def dashboard_view(request):
     if user.es_paciente():
         return render(request, 'usuarios/dashboard_paciente.html', context)
     elif user.es_doctor():
-        return render(request, 'usuarios/dashboard_doctor.html', context)
+        # Los doctores van a su gestión de horarios
+        return redirect('doctores:gestionar_horarios')
     elif user.es_recepcion():
-        return render(request, 'usuarios/dashboard_recepcion.html', context)
+        # Recepción va al dashboard de administración
+        return redirect('administracion:dashboard')
     elif user.es_administrador():
-        return render(request, 'usuarios/dashboard_admin.html', context)
+        # Administradores van al dashboard de administración
+        return redirect('administracion:dashboard')
     else:
         return render(request, 'usuarios/dashboard_general.html', context)
 
@@ -128,6 +150,12 @@ def home_view(request):
     Vista de la página de inicio
     """
     if request.user.is_authenticated:
-        return redirect('usuarios:dashboard')
+        # Redirigir según el tipo de usuario
+        if request.user.es_administrador() or request.user.es_recepcion():
+            return redirect('administracion:dashboard')
+        elif request.user.es_doctor():
+            return redirect('doctores:gestionar_horarios')
+        else:
+            return redirect('usuarios:dashboard')
     
     return render(request, 'usuarios/home.html')

@@ -46,7 +46,7 @@ python manage.py crear_admin
 
 ## Comandos Personalizados
 
-El proyecto incluye comandos personalizados para la gestión de usuarios:
+El proyecto incluye comandos personalizados para la gestión de usuarios y datos iniciales:
 
 ### Crear Administrador
 ```bash
@@ -64,6 +64,23 @@ python manage.py actualizar_tipos_usuario
 Este comando actualiza automáticamente los tipos de usuario para usuarios existentes:
 - Convierte superusuarios a tipo 'administrador'
 - Convierte usuarios staff (no superusuarios) a tipo 'recepcion'
+
+### Crear Especialidades Médicas
+```bash
+python manage.py crear_especialidades
+```
+Este comando crea las especialidades médicas básicas en el sistema:
+- Medicina General, Cardiología, Dermatología, Pediatría
+- Ginecología, Traumatología, Oftalmología, Otorrinolaringología
+- Neurología, Psiquiatría, Endocrinología, Gastroenterología
+
+### Configuración Inicial Completa
+Para configurar el sistema desde cero, ejecuta los comandos en este orden:
+```bash
+python manage.py migrate
+python manage.py crear_especialidades
+python manage.py crear_admin
+```
 
 ## Estructura del Proyecto
 

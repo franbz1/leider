@@ -167,3 +167,8 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 # Modelo de usuario personalizado
 AUTH_USER_MODEL = 'usuarios.Usuario'
+
+# Configuración de autenticación
+LOGIN_URL = 'usuarios:login'
+LOGIN_REDIRECT_URL = 'usuarios:dashboard'
+LOGOUT_REDIRECT_URL = 'usuarios:login'

@@ -22,10 +22,11 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('usuarios.urls')),
+    path('dashboard/', include('administracion.urls')),
+    path('usuarios/', include('usuarios.urls')),
     path('doctores/', include('doctores.urls')),
-    path('citas/', include('citas.urls')),
-    path('notificaciones/', include('notificaciones.urls')),
-    path('administracion/', include('administracion.urls')),
+    # path('citas/', include('citas.urls')),  # Se descomentará cuando se implemente
+    # path('notificaciones/', include('notificaciones.urls')),  # Se descomentará cuando se implemente
 ]
 
 # Servir archivos media en desarrollo
