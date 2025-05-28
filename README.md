@@ -12,6 +12,59 @@ AgendaMédica es un sistema web que permite la gestión completa de citas médic
 - Envío de recordatorios automáticos por correo electrónico y SMS
 - Administración de usuarios (pacientes, doctores, recepción, administradores)
 
+## Instalación
+
+1. Clonar el repositorio:
+```bash
+git clone https://github.com/tu-usuario/agenda-medica.git
+cd agenda-medica
+```
+
+2. Crear y activar entorno virtual:
+```bash
+python -m venv venv
+# En Windows:
+venv\Scripts\activate
+# En Unix o MacOS:
+source venv/bin/activate
+```
+
+3. Instalar dependencias:
+```bash
+pip install -r requirements.txt
+```
+
+4. Aplicar migraciones:
+```bash
+python manage.py migrate
+```
+
+5. Crear superusuario administrador:
+```bash
+python manage.py crear_admin
+```
+
+## Comandos Personalizados
+
+El proyecto incluye comandos personalizados para la gestión de usuarios:
+
+### Crear Administrador
+```bash
+python manage.py crear_admin
+```
+Este comando interactivo permite crear un superusuario administrador con todos los permisos necesarios. También acepta argumentos opcionales:
+```bash
+python manage.py crear_admin --email=admin@ejemplo.com --nombre=Admin --apellido=Sistema --password=contraseña
+```
+
+### Actualizar Tipos de Usuario
+```bash
+python manage.py actualizar_tipos_usuario
+```
+Este comando actualiza automáticamente los tipos de usuario para usuarios existentes:
+- Convierte superusuarios a tipo 'administrador'
+- Convierte usuarios staff (no superusuarios) a tipo 'recepcion'
+
 ## Estructura del Proyecto
 
 El proyecto está organizado en las siguientes aplicaciones Django:

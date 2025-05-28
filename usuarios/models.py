@@ -67,6 +67,21 @@ class Usuario(AbstractUser):
         verbose_name_plural = 'Usuarios'
         db_table = 'usuarios_usuario'
     
+    def save(self, *args, **kwargs):
+        """
+        Método save personalizado para asignar automáticamente
+        el tipo de usuario correcto según los permisos
+        """
+        # Si es superusuario, asignar tipo administrador
+        if self.is_superuser and self.tipo_usuario == 'paciente':
+            self.tipo_usuario = 'administrador'
+        
+        # Si es staff pero no superusuario y es paciente, asignar recepción
+        elif self.is_staff and not self.is_superuser and self.tipo_usuario == 'paciente':
+            self.tipo_usuario = 'recepcion'
+        
+        super().save(*args, **kwargs)
+    
     def __str__(self):
         return f"{self.get_full_name()} ({self.email})"
     
